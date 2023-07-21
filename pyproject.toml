@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "shinami-python-sdk"
+version = "0.1.0"
+description = ""
+authors = ["Brian Li <brian@brianli.com>"]
+readme = "README.md"
+packages = [{include = "shinami_python_sdk"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.24.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
