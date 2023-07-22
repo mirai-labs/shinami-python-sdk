@@ -15,6 +15,7 @@ httpx = "^0.24.1"
 python-dotenv = "^1.0.0"
 pytest = "^7.4.0"
 ruff = "^0.0.280"
+flit = "^3.9.0"
 
 [build-system]
 requires = ["poetry-core"]
