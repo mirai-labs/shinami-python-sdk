@@ -1,15 +1,6 @@
 import uuid
-from dataclasses import dataclass
 
 import httpx
-
-
-@dataclass
-class ShinamiJsonRpcPayload:
-    method: str
-    params: list[str]
-    jsonrpc: str = "2.0"
-    id: str = str(uuid.uuid4())
 
 
 class ShinamiIawClient:
@@ -35,11 +26,59 @@ class ShinamiIawClient:
         Args:
             secret (str): The secret to use to create the session.
         """
-        r = await self._make_post_request(
+        result = await self._make_post_request(
             "shinami_key_createSession",
             [secret],
         )
-        return r
+        return result
+
+    async def create_wallet(
+        self,
+        wallet_id: str,
+        session_token: str,
+    ):
+        """
+        Create a Shinami wallet with the given wallet ID and session token.
+
+        Args:
+            wallet_id (str): An ID to associate with the wallet.
+            session_token (str): The session token to use to create the wallet.
+        """
+        result = await self._make_post_request(
+            "shinami_wal_createWallet",
+            [wallet_id, session_token],
+        )
+        return result
+
+    async def execute_gasless_transaction_block(
+        self,
+        session_token: str,
+        wallet_id: str,
+        tx_bytes: str,
+        gas_budget: int,
+        request_type: str,
+    ):
+        """
+        Execute a gasless transaction block with the given parameters.
+
+        Args:
+            session_token (str): The session token to use to execute the transaction block.
+            wallet_id (str): The ID of the wallet to use to execute the transaction block.
+            tx_bytes (str): The transaction bytes to use to execute the transaction block.
+            gas_budget (int): The gas budget to use to execute the transaction block.
+            request_type (str): The request type to use to execute the transaction block.
+        """
+        result = await self._make_post_request(
+            "shinami_wal_executeGaslessTransactionBlock",
+            [
+                wallet_id,
+                session_token,
+                tx_bytes,
+                gas_budget,
+                request_type,
+            ],
+        )
+        return result
 
     async def _make_post_request(
         self,
