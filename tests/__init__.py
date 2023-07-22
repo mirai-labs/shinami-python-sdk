@@ -4,7 +4,7 @@ from time import time
 
 from dotenv import load_dotenv
 
-from shinami_python_sdk.shinami.iaw import ShinamiIawClient
+from shinami_python_sdk.iaw import ShinamiIawClient
 
 load_dotenv()
 

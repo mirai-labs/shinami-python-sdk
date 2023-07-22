@@ -1,6 +1,8 @@
 # Shinami Python SDK
 
-This package is an asynchronous API wrapper for the Shinami In-App Wallet (IAW) API. Currently, this SDK supports the IAW methods below.
+This package is an asynchronous API wrapper for the [Shinami In-App Wallet (IAW) API](https://docs.shinami.com/reference/in-app-wallet-api).
+
+Currently, this SDK supports the IAW methods below.
 
 * shinami_key_createSession
 * shinami_wal_createWallet
@@ -13,7 +15,7 @@ This package is an asynchronous API wrapper for the Shinami In-App Wallet (IAW) 
 import asyncio
 import os
 
-from shinami_python_sdk.shinami.iaw import ShinamiIawClient
+from shinami_python_sdk.iaw import ShinamiIawClient
 
 # Set Shinami API key.
 SHINAMI_IAW_API_TOKEN = os.environ["SHINAMI_IAW_API_KEY"]
