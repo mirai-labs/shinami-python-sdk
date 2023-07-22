@@ -9,6 +9,12 @@ Currently, this SDK supports the IAW methods below.
 * shinami_wal_executeGaslessTransactionBlock
 * shinami_wal_getWallet
 
+## How to Install
+
+```
+pip install shinami-python-sdk
+```
+
 ## How to Use
 
 ```
