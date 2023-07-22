@@ -1,4 +1,6 @@
+import logging
 import os
+from time import time
 
 from dotenv import load_dotenv
 
@@ -6,23 +8,26 @@ from shinami_python_sdk.shinami import ShinamiIawClient
 
 load_dotenv()
 
+logging.basicConfig(level=logging.INFO)
+
 SHINAMI_IAW_API_KEY = os.environ["SHINAMI_IAW_API_KEY"]
-
-
-def assert_dict_structure(my_dict):
-    assert isinstance(my_dict, dict), "Input should be a dictionary."
-
-    required_keys = ["jsonrpc", "result", "id"]
-
-    for key in required_keys:
-        assert key in my_dict, f"Missing key: {key}"
-
-    assert isinstance(my_dict["jsonrpc"], str), "'jsonrpc' should be a string."
-    assert isinstance(my_dict["result"], str), "'result' should be a string."
-    assert isinstance(my_dict["id"], str), "'id' should be a string."
 
 
 async def test_create_session():
     shinami_iaw_client = ShinamiIawClient(SHINAMI_IAW_API_KEY)
     session = await shinami_iaw_client.create_session("NOT_A_SECURE_SECRET")
-    assert_dict_structure(session)
+    assert isinstance(session, str)
+    return session
+
+
+async def test_create_wallet(
+    session_token: str,
+    wallet_id: str = f"wallet_test_{int(time())}",
+):
+    shinami_iaw_client = ShinamiIawClient(SHINAMI_IAW_API_KEY)
+    wallet = await shinami_iaw_client.create_wallet(
+        wallet_id=wallet_id,
+        session_token=session_token,
+    )
+    assert isinstance(wallet, str)
+    return wallet
