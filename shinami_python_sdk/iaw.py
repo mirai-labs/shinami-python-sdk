@@ -1,8 +1,19 @@
+import json
 import uuid
 
 import httpx
 
 from shinami_python_sdk import logger
+
+
+class ShinamiInvalidApiTokenException(Exception):
+    def __init__(self, message: str) -> None:
+        self.message = message
+
+
+class ShinamiWalletNotFoundException(Exception):
+    def __init__(self, message: str) -> None:
+        self.message = message
 
 
 class ShinamiIawClient:
@@ -70,7 +81,10 @@ class ShinamiIawClient:
         if full_response is True:
             return r
         else:
-            return r["result"]
+            try:
+                return r["result"]
+            except KeyError:
+                raise Exception(json.dumps(r["error"]["data"]))
 
     async def execute_gasless_transaction_block(
         self,
@@ -112,7 +126,6 @@ class ShinamiIawClient:
     async def get_wallet(
         self,
         wallet_id: str,
-        full_response: bool = False,
     ) -> dict | str:
         r = await self._make_post_request(
             f"{self.api_url}/wallet/v1",
@@ -120,10 +133,15 @@ class ShinamiIawClient:
             [wallet_id],
         )
 
-        if full_response is True:
-            return r
-        else:
+        try:
             return r["result"]
+        except KeyError:
+            if r["error"]["code"] == -32602:
+                raise ShinamiWalletNotFoundException(
+                    f"Wallet with ID {wallet_id} not found."
+                )
+            else:
+                raise Exception(r["error"])
 
     async def _make_post_request(
         self,
@@ -156,10 +174,11 @@ class ShinamiIawClient:
                 headers=self._generate_headers(),
             )
 
+            logger.info(r.status_code)
             logger.info(r.json())
 
             if r.status_code == 401:
-                raise Exception(
+                raise ShinamiInvalidApiTokenException(
                     "Ser, your Shinami API token is invalid. Please provide a valid API token and try again."
                 )
 

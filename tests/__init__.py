@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 from time import time
@@ -30,4 +31,12 @@ async def test_create_wallet(
         session_token=session_token,
     )
     assert isinstance(wallet, str)
+    return wallet
+
+
+async def test_get_wallet(
+    wallet_id: str,
+):
+    shinami_iaw_client = ShinamiIawClient(SHINAMI_IAW_API_KEY)
+    wallet = await shinami_iaw_client.get_wallet(wallet_id)
     return wallet
