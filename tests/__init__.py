@@ -40,3 +40,7 @@ async def test_get_wallet(
     shinami_iaw_client = ShinamiIawClient(SHINAMI_IAW_API_KEY)
     wallet = await shinami_iaw_client.get_wallet(wallet_id)
     return wallet
+
+
+wallet = asyncio.run(test_get_wallet("bwhli"))
+print(wallet)

@@ -4,6 +4,7 @@ import uuid
 import httpx
 
 from shinami_python_sdk import logger
+from shinami_python_sdk.models import ShinamiWallet
 
 
 class ShinamiInvalidApiTokenException(Exception):
@@ -126,7 +127,7 @@ class ShinamiIawClient:
     async def get_wallet(
         self,
         wallet_id: str,
-    ) -> dict | str:
+    ) -> ShinamiWallet:
         r = await self._make_post_request(
             f"{self.api_url}/wallet/v1",
             "shinami_wal_getWallet",
@@ -134,7 +135,10 @@ class ShinamiIawClient:
         )
 
         try:
-            return r["result"]
+            return ShinamiWallet(
+                id=wallet_id,
+                address=r["result"],
+            )
         except KeyError:
             if r["error"]["code"] == -32602:
                 raise ShinamiWalletNotFoundException(

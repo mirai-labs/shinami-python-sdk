@@ -10,6 +10,7 @@ packages = [{include = "shinami_python_sdk"}]
 python = "^3.11"
 httpx = "^0.24.1"
 pysui = "^0.33.0"
+pydantic = "^2.1.1"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
